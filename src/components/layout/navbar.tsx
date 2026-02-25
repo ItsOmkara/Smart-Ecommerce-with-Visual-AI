@@ -80,6 +80,12 @@ export function Navbar({ cartCount, onCartClick }: NavbarProps) {
                             )}
                         </button>
 
+                        <Link href="/login" className="hidden md:block">
+                            <Button variant="outline" size="sm" className="text-sm">
+                                Sign In
+                            </Button>
+                        </Link>
+
                         {/* Mobile Menu Button */}
                         <Button
                             variant="ghost"

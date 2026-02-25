@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -21,13 +21,20 @@ import { ProductCard } from "@/components/product/product-card"
 import { CartSheet } from "@/components/cart/cart-sheet"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { products, categories } from "@/lib/mock-data"
-import { Product, CartItem } from "@/lib/types"
+import { fetchProducts, fetchCategories } from "@/lib/api"
+import { Product, CartItem, Category } from "@/lib/types"
 import { formatPrice } from "@/lib/utils"
 
 export default function HomePage() {
     const [cartItems, setCartItems] = useState<CartItem[]>([])
     const [cartOpen, setCartOpen] = useState(false)
+    const [products, setProducts] = useState<Product[]>([])
+    const [categories, setCategories] = useState<Category[]>([])
+
+    useEffect(() => {
+        fetchProducts().then(setProducts).catch(console.error)
+        fetchCategories().then(setCategories).catch(console.error)
+    }, [])
 
     const addToCart = useCallback((product: Product) => {
         setCartItems((prev) => {

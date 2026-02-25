@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useParams } from "next/navigation"
@@ -23,15 +23,17 @@ import { ProductCard } from "@/components/product/product-card"
 import { CartSheet } from "@/components/cart/cart-sheet"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { products } from "@/lib/mock-data"
+import { fetchProductById, fetchRelatedProducts } from "@/lib/api"
 import { Product, CartItem } from "@/lib/types"
 import { formatPrice } from "@/lib/utils"
 
 export default function ProductDetailPage() {
     const params = useParams()
     const productId = Number(params.id)
-    const product = products.find((p) => p.id === productId)
 
+    const [product, setProduct] = useState<Product | null>(null)
+    const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
+    const [loading, setLoading] = useState(true)
     const [cartItems, setCartItems] = useState<CartItem[]>([])
     const [cartOpen, setCartOpen] = useState(false)
     const [selectedImage, setSelectedImage] = useState(0)
@@ -39,6 +41,19 @@ export default function ProductDetailPage() {
     const [selectedSize, setSelectedSize] = useState("")
     const [quantity, setQuantity] = useState(1)
     const [isLiked, setIsLiked] = useState(false)
+
+    useEffect(() => {
+        setLoading(true)
+        fetchProductById(productId)
+            .then((p) => {
+                setProduct(p)
+                if (p) {
+                    fetchRelatedProducts(p.id, 4).then(setRelatedProducts).catch(console.error)
+                }
+            })
+            .catch(console.error)
+            .finally(() => setLoading(false))
+    }, [productId])
 
     const addToCart = useCallback(
         (prod: Product) => {
@@ -76,6 +91,17 @@ export default function ProductDetailPage() {
 
     const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
+    if (loading) {
+        return (
+            <main className="min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <p className="text-gray-400">Loading product...</p>
+                </div>
+            </main>
+        )
+    }
+
     if (!product) {
         return (
             <main className="min-h-screen flex items-center justify-center">
@@ -88,10 +114,6 @@ export default function ProductDetailPage() {
             </main>
         )
     }
-
-    const relatedProducts = products
-        .filter((p) => p.category === product.category && p.id !== product.id)
-        .slice(0, 4)
 
     const discount = product.originalPrice
         ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -163,8 +185,8 @@ export default function ProductDetailPage() {
                                             key={idx}
                                             onClick={() => setSelectedImage(idx)}
                                             className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${selectedImage === idx
-                                                    ? "border-violet-500 shadow-lg shadow-violet-500/25"
-                                                    : "border-transparent opacity-60 hover:opacity-100"
+                                                ? "border-violet-500 shadow-lg shadow-violet-500/25"
+                                                : "border-transparent opacity-60 hover:opacity-100"
                                                 }`}
                                         >
                                             <Image
@@ -194,8 +216,8 @@ export default function ProductDetailPage() {
                                             <Star
                                                 key={i}
                                                 className={`w-4 h-4 ${i < Math.floor(product.rating)
-                                                        ? "fill-amber-400 text-amber-400"
-                                                        : "text-gray-600"
+                                                    ? "fill-amber-400 text-amber-400"
+                                                    : "text-gray-600"
                                                     }`}
                                             />
                                         ))}
@@ -238,8 +260,8 @@ export default function ProductDetailPage() {
                                                     key={idx}
                                                     onClick={() => setSelectedColor(idx)}
                                                     className={`w-9 h-9 rounded-full border-2 transition-all ${selectedColor === idx
-                                                            ? "border-violet-500 scale-110 shadow-lg"
-                                                            : "border-transparent hover:border-white/30"
+                                                        ? "border-violet-500 scale-110 shadow-lg"
+                                                        : "border-transparent hover:border-white/30"
                                                         }`}
                                                     style={{ backgroundColor: color }}
                                                 >
@@ -264,8 +286,8 @@ export default function ProductDetailPage() {
                                                     key={size}
                                                     onClick={() => setSelectedSize(size)}
                                                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedSize === size
-                                                            ? "bg-violet-500 text-white shadow-lg shadow-violet-500/25"
-                                                            : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                                                        ? "bg-violet-500 text-white shadow-lg shadow-violet-500/25"
+                                                        : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
                                                         }`}
                                                 >
                                                     {size}

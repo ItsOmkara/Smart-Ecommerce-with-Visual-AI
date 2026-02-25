@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useMemo } from "react"
+import { useState, useCallback, useMemo, useEffect } from "react"
 import { Filter, Grid3X3, LayoutList, SlidersHorizontal, X } from "lucide-react"
 import { LiquidEffectAnimation } from "@/components/ui/liquid-effect-animation"
 import { Navbar } from "@/components/layout/navbar"
@@ -10,8 +10,8 @@ import { CartSheet } from "@/components/cart/cart-sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { products, categories } from "@/lib/mock-data"
-import { Product, CartItem } from "@/lib/types"
+import { fetchProducts, fetchCategories } from "@/lib/api"
+import { Product, CartItem, Category } from "@/lib/types"
 
 export default function ProductsPage() {
     const [cartItems, setCartItems] = useState<CartItem[]>([])
@@ -21,6 +21,13 @@ export default function ProductsPage() {
     const [searchQuery, setSearchQuery] = useState("")
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 1200])
     const [showFilters, setShowFilters] = useState(false)
+    const [products, setProducts] = useState<Product[]>([])
+    const [categories, setCategories] = useState<Category[]>([])
+
+    useEffect(() => {
+        fetchProducts().then(setProducts).catch(console.error)
+        fetchCategories().then(setCategories).catch(console.error)
+    }, [])
 
     const addToCart = useCallback((product: Product) => {
         setCartItems((prev) => {
@@ -94,7 +101,7 @@ export default function ProductsPage() {
         }
 
         return filtered
-    }, [selectedCategory, sortBy, searchQuery, priceRange])
+    }, [selectedCategory, sortBy, searchQuery, priceRange, products])
 
     const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
     const allCategories = ["All", ...categories.map((c) => c.name)]
@@ -148,8 +155,8 @@ export default function ProductsPage() {
                                         key={cat}
                                         onClick={() => setSelectedCategory(cat)}
                                         className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${selectedCategory === cat
-                                                ? "bg-violet-500 text-white shadow-lg shadow-violet-500/25"
-                                                : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                                            ? "bg-violet-500 text-white shadow-lg shadow-violet-500/25"
+                                            : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
                                             }`}
                                     >
                                         {cat}

@@ -31,3 +31,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Backend (Spring Boot)
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# AI Service (Python)
+ai-service/__pycache__/
+ai-service/venv/
+ai-service/.venv/
+ai-service/faiss_index/
+ai-service/*.pyc

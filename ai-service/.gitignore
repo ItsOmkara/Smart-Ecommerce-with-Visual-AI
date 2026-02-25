@@ -1,0 +1,26 @@
+# Dependencies
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# FAISS index (generated)
+faiss_index/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Distribution
+*.egg-info/
+dist/
+build/

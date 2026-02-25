@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 import Image from "next/image"
 import {
     Upload,
@@ -19,7 +19,7 @@ import { ProductCard } from "@/components/product/product-card"
 import { CartSheet } from "@/components/cart/cart-sheet"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { products } from "@/lib/mock-data"
+import { fetchProducts } from "@/lib/api"
 import { Product, CartItem } from "@/lib/types"
 
 export default function SearchPage() {
@@ -30,7 +30,12 @@ export default function SearchPage() {
     const [isSearching, setIsSearching] = useState(false)
     const [searchResults, setSearchResults] = useState<Product[]>([])
     const [hasSearched, setHasSearched] = useState(false)
+    const [products, setProducts] = useState<Product[]>([])
     const fileInputRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        fetchProducts().then(setProducts).catch(console.error)
+    }, [])
 
     const addToCart = useCallback((product: Product) => {
         setCartItems((prev) => {
@@ -153,8 +158,8 @@ export default function SearchPage() {
                                 onDragOver={handleDragOver}
                                 onDragLeave={handleDragLeave}
                                 className={`glass rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 ${isDragging
-                                        ? "border-2 border-violet-500 bg-violet-500/5 scale-[1.02]"
-                                        : "border-2 border-dashed border-white/10 hover:border-violet-500/50"
+                                    ? "border-2 border-violet-500 bg-violet-500/5 scale-[1.02]"
+                                    : "border-2 border-dashed border-white/10 hover:border-violet-500/50"
                                     }`}
                                 onClick={() => fileInputRef.current?.click()}
                             >

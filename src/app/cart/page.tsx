@@ -23,17 +23,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CartItem, Product } from "@/lib/types"
 import { formatPrice } from "@/lib/utils"
-import { products } from "@/lib/mock-data"
 
 export default function CartPage() {
-    const [cartItems, setCartItems] = useState<CartItem[]>(() => {
-        // Pre-populate with a few items for demo purposes
-        return [
-            { product: products[0], quantity: 1 },
-            { product: products[2], quantity: 2 },
-            { product: products[4], quantity: 1 },
-        ]
-    })
+    const [cartItems, setCartItems] = useState<CartItem[]>([])
     const [cartSheetOpen, setCartSheetOpen] = useState(false)
     const [promoCode, setPromoCode] = useState("")
     const [promoApplied, setPromoApplied] = useState(false)
