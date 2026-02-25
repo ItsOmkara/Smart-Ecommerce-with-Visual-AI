@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useRef, useEffect } from "react"
+import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import {
     Upload,
@@ -10,7 +10,7 @@ import {
     ImageIcon,
     Sparkles,
     Loader2,
-    ArrowRight,
+    AlertCircle,
 } from "lucide-react"
 import { LiquidEffectAnimation } from "@/components/ui/liquid-effect-animation"
 import { Navbar } from "@/components/layout/navbar"
@@ -19,17 +19,19 @@ import { ProductCard } from "@/components/product/product-card"
 import { CartSheet } from "@/components/cart/cart-sheet"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { fetchProducts } from "@/lib/api"
-import { Product, CartItem } from "@/lib/types"
+import { fetchProducts, visualSearch } from "@/lib/api"
+import { useCart } from "@/lib/cart-context"
+import { Product, SearchResult } from "@/lib/types"
 
 export default function SearchPage() {
-    const [cartItems, setCartItems] = useState<CartItem[]>([])
-    const [cartOpen, setCartOpen] = useState(false)
+    const { addToCart } = useCart()
     const [uploadedImage, setUploadedImage] = useState<string | null>(null)
+    const [uploadedFile, setUploadedFile] = useState<File | null>(null)
     const [isDragging, setIsDragging] = useState(false)
     const [isSearching, setIsSearching] = useState(false)
-    const [searchResults, setSearchResults] = useState<Product[]>([])
+    const [searchResults, setSearchResults] = useState<SearchResult[]>([])
     const [hasSearched, setHasSearched] = useState(false)
+    const [searchError, setSearchError] = useState("")
     const [products, setProducts] = useState<Product[]>([])
     const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -37,41 +39,9 @@ export default function SearchPage() {
         fetchProducts().then(setProducts).catch(console.error)
     }, [])
 
-    const addToCart = useCallback((product: Product) => {
-        setCartItems((prev) => {
-            const existing = prev.find((item) => item.product.id === product.id)
-            if (existing) {
-                return prev.map((item) =>
-                    item.product.id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                )
-            }
-            return [...prev, { product, quantity: 1 }]
-        })
-        setCartOpen(true)
-    }, [])
-
-    const updateQuantity = useCallback((productId: number, quantity: number) => {
-        if (quantity === 0) {
-            setCartItems((prev) => prev.filter((item) => item.product.id !== productId))
-        } else {
-            setCartItems((prev) =>
-                prev.map((item) =>
-                    item.product.id === productId ? { ...item, quantity } : item
-                )
-            )
-        }
-    }, [])
-
-    const removeItem = useCallback((productId: number) => {
-        setCartItems((prev) => prev.filter((item) => item.product.id !== productId))
-    }, [])
-
-    const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
-
     const handleFileUpload = (file: File) => {
         if (!file.type.startsWith("image/")) return
+        setUploadedFile(file)
         const reader = new FileReader()
         reader.onload = (e) => {
             setUploadedImage(e.target?.result as string)
@@ -95,25 +65,52 @@ export default function SearchPage() {
         setIsDragging(false)
     }
 
-    const simulateSearch = () => {
+    const handleSearch = async () => {
+        if (!uploadedFile) return
+
         setIsSearching(true)
         setHasSearched(false)
+        setSearchError("")
 
-        // Simulate AI search with random delay
-        setTimeout(() => {
-            // Randomly pick 6-10 products as "similar" results
-            const shuffled = [...products].sort(() => 0.5 - Math.random())
-            const count = Math.floor(Math.random() * 5) + 6
-            setSearchResults(shuffled.slice(0, count))
-            setIsSearching(false)
+        try {
+            const results = await visualSearch(uploadedFile)
+            setSearchResults(results)
             setHasSearched(true)
-        }, 2000)
+        } catch (err: any) {
+            console.error("Visual search failed:", err)
+            setSearchError(
+                err.message || "Visual search failed. Make sure the AI service is running."
+            )
+            setHasSearched(true)
+        } finally {
+            setIsSearching(false)
+        }
+    }
+
+    // For sample images from the product catalog, we need to convert
+    // the product image URL to a File so the AI service can process it
+    const handleSampleSearch = async (product: Product) => {
+        setUploadedImage(product.image)
+        setSearchError("")
+
+        try {
+            // Fetch the product image and convert to File
+            const res = await fetch(product.image)
+            const blob = await res.blob()
+            const file = new File([blob], "sample.jpg", { type: blob.type })
+            setUploadedFile(file)
+        } catch {
+            // If we can't fetch the image (CORS etc), just show it as preview
+            setUploadedFile(null)
+        }
     }
 
     const clearSearch = () => {
         setUploadedImage(null)
+        setUploadedFile(null)
         setSearchResults([])
         setHasSearched(false)
+        setSearchError("")
     }
 
     return (
@@ -124,14 +121,8 @@ export default function SearchPage() {
                 roughness={0.15}
                 displacementScale={3}
             />
-            <Navbar cartCount={cartCount} onCartClick={() => setCartOpen(true)} />
-            <CartSheet
-                isOpen={cartOpen}
-                onClose={() => setCartOpen(false)}
-                items={cartItems}
-                onUpdateQuantity={updateQuantity}
-                onRemoveItem={removeItem}
-            />
+            <Navbar />
+            <CartSheet />
 
             <div className="pt-24 pb-20 px-4">
                 <div className="max-w-7xl mx-auto">
@@ -209,7 +200,6 @@ export default function SearchPage() {
                         ) : (
                             <div className="glass rounded-3xl p-8">
                                 <div className="flex items-start gap-6">
-                                    {/* Uploaded image preview */}
                                     <div className="relative w-48 h-64 rounded-2xl overflow-hidden flex-shrink-0">
                                         <Image
                                             src={uploadedImage}
@@ -239,8 +229,8 @@ export default function SearchPage() {
                                         <Button
                                             variant="glow"
                                             size="lg"
-                                            onClick={simulateSearch}
-                                            disabled={isSearching}
+                                            onClick={handleSearch}
+                                            disabled={isSearching || !uploadedFile}
                                         >
                                             {isSearching ? (
                                                 <>
@@ -268,10 +258,10 @@ export default function SearchPage() {
                                         </div>
                                         <div className="space-y-3">
                                             {[
-                                                "Extracting visual features...",
-                                                "Analyzing color palette...",
-                                                "Matching patterns & textures...",
-                                                "Searching vector database...",
+                                                "Extracting visual features with CLIP...",
+                                                "Analyzing color palette & patterns...",
+                                                "Searching FAISS vector database...",
+                                                "Fetching similar products...",
                                             ].map((step, idx) => (
                                                 <div
                                                     key={idx}
@@ -285,6 +275,17 @@ export default function SearchPage() {
                                                     <span className="text-sm text-gray-400">{step}</span>
                                                 </div>
                                             ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Error message */}
+                                {searchError && (
+                                    <div className="mt-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-start gap-3">
+                                        <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                                        <div>
+                                            <p className="text-sm text-red-400 font-medium">Search failed</p>
+                                            <p className="text-xs text-red-400/70 mt-1">{searchError}</p>
                                         </div>
                                     </div>
                                 )}
@@ -311,24 +312,42 @@ export default function SearchPage() {
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                {searchResults.map((product, idx) => (
+                                {searchResults.map((result, idx) => (
                                     <div
-                                        key={product.id}
+                                        key={result.product.id}
                                         className="relative"
                                         style={{
                                             animation: `fade-in-up 0.5s ease-out ${idx * 0.1}s forwards`,
                                             opacity: 0,
                                         }}
                                     >
-                                        {/* Similarity score pill */}
+                                        {/* Real similarity score from CLIP */}
                                         <div className="absolute top-3 right-3 z-10 bg-emerald-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-full">
-                                            {(95 - idx * 3)}% match
+                                            {result.similarity.toFixed(1)}% match
                                         </div>
-                                        <ProductCard product={product} onAddToCart={addToCart} />
+                                        <ProductCard product={result.product} onAddToCart={addToCart} />
                                     </div>
                                 ))}
                             </div>
                         </section>
+                    )}
+
+                    {/* No results */}
+                    {hasSearched && searchResults.length === 0 && !searchError && (
+                        <div className="glass rounded-2xl p-16 text-center">
+                            <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
+                                <Search className="w-8 h-8 text-gray-600" />
+                            </div>
+                            <h3 className="text-xl font-semibold text-white mb-2">
+                                No similar products found
+                            </h3>
+                            <p className="text-gray-400 mb-6">
+                                Try uploading a different image or check if the AI service has indexed your products.
+                            </p>
+                            <Button variant="outline" onClick={clearSearch}>
+                                Try Another Image
+                            </Button>
+                        </div>
                     )}
 
                     {/* Sample searches */}
@@ -341,9 +360,7 @@ export default function SearchPage() {
                                 {products.slice(0, 4).map((p) => (
                                     <button
                                         key={p.id}
-                                        onClick={() => {
-                                            setUploadedImage(p.image)
-                                        }}
+                                        onClick={() => handleSampleSearch(p)}
                                         className="group relative aspect-square rounded-2xl overflow-hidden glass-card"
                                     >
                                         <Image

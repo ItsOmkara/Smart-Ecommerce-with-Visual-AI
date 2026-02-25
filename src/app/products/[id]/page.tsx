@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useEffect } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useParams } from "next/navigation"
@@ -24,18 +24,18 @@ import { CartSheet } from "@/components/cart/cart-sheet"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { fetchProductById, fetchRelatedProducts } from "@/lib/api"
-import { Product, CartItem } from "@/lib/types"
+import { useCart } from "@/lib/cart-context"
+import { Product } from "@/lib/types"
 import { formatPrice } from "@/lib/utils"
 
 export default function ProductDetailPage() {
     const params = useParams()
     const productId = Number(params.id)
+    const { addToCart } = useCart()
 
     const [product, setProduct] = useState<Product | null>(null)
     const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
     const [loading, setLoading] = useState(true)
-    const [cartItems, setCartItems] = useState<CartItem[]>([])
-    const [cartOpen, setCartOpen] = useState(false)
     const [selectedImage, setSelectedImage] = useState(0)
     const [selectedColor, setSelectedColor] = useState(0)
     const [selectedSize, setSelectedSize] = useState("")
@@ -55,41 +55,9 @@ export default function ProductDetailPage() {
             .finally(() => setLoading(false))
     }, [productId])
 
-    const addToCart = useCallback(
-        (prod: Product) => {
-            setCartItems((prev) => {
-                const existing = prev.find((item) => item.product.id === prod.id)
-                if (existing) {
-                    return prev.map((item) =>
-                        item.product.id === prod.id
-                            ? { ...item, quantity: item.quantity + quantity }
-                            : item
-                    )
-                }
-                return [...prev, { product: prod, quantity }]
-            })
-            setCartOpen(true)
-        },
-        [quantity]
-    )
-
-    const updateQuantity = useCallback((productId: number, qty: number) => {
-        if (qty === 0) {
-            setCartItems((prev) => prev.filter((item) => item.product.id !== productId))
-        } else {
-            setCartItems((prev) =>
-                prev.map((item) =>
-                    item.product.id === productId ? { ...item, quantity: qty } : item
-                )
-            )
-        }
-    }, [])
-
-    const removeItem = useCallback((productId: number) => {
-        setCartItems((prev) => prev.filter((item) => item.product.id !== productId))
-    }, [])
-
-    const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
+    const handleAddToCart = (prod: Product) => {
+        addToCart(prod, quantity)
+    }
 
     if (loading) {
         return (
@@ -127,14 +95,8 @@ export default function ProductDetailPage() {
                 roughness={0.15}
                 displacementScale={3}
             />
-            <Navbar cartCount={cartCount} onCartClick={() => setCartOpen(true)} />
-            <CartSheet
-                isOpen={cartOpen}
-                onClose={() => setCartOpen(false)}
-                items={cartItems}
-                onUpdateQuantity={updateQuantity}
-                onRemoveItem={removeItem}
-            />
+            <Navbar />
+            <CartSheet />
 
             <div className="pt-24 pb-20 px-4">
                 <div className="max-w-7xl mx-auto">
@@ -321,7 +283,7 @@ export default function ProductDetailPage() {
                                         variant="glow"
                                         size="lg"
                                         className="flex-1"
-                                        onClick={() => addToCart(product)}
+                                        onClick={() => handleAddToCart(product)}
                                     >
                                         <ShoppingBag className="w-5 h-5 mr-2" />
                                         Add to Cart — {formatPrice(product.price * quantity)}

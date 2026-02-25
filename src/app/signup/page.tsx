@@ -7,10 +7,11 @@ import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Sparkles } from "lucide-reac
 import { LiquidEffectAnimation } from "@/components/ui/liquid-effect-animation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { register } from "@/lib/api"
+import { useAuth } from "@/lib/auth-context"
 
 export default function SignupPage() {
     const router = useRouter()
+    const { signup } = useAuth()
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -36,7 +37,7 @@ export default function SignupPage() {
         setLoading(true)
 
         try {
-            await register(name, email, password)
+            await signup(name, email, password)
             router.push("/")
         } catch (err: any) {
             setError(err.message || "Registration failed")

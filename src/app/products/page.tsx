@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useCallback, useMemo, useEffect } from "react"
-import { Filter, Grid3X3, LayoutList, SlidersHorizontal, X } from "lucide-react"
+import { useState, useMemo, useEffect } from "react"
+import { Filter } from "lucide-react"
 import { LiquidEffectAnimation } from "@/components/ui/liquid-effect-animation"
 import { Navbar } from "@/components/layout/navbar"
 import { Footer } from "@/components/layout/footer"
@@ -9,18 +9,16 @@ import { ProductCard } from "@/components/product/product-card"
 import { CartSheet } from "@/components/cart/cart-sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
 import { fetchProducts, fetchCategories } from "@/lib/api"
-import { Product, CartItem, Category } from "@/lib/types"
+import { useCart } from "@/lib/cart-context"
+import { Product, Category } from "@/lib/types"
 
 export default function ProductsPage() {
-    const [cartItems, setCartItems] = useState<CartItem[]>([])
-    const [cartOpen, setCartOpen] = useState(false)
+    const { addToCart } = useCart()
     const [selectedCategory, setSelectedCategory] = useState<string>("All")
     const [sortBy, setSortBy] = useState<string>("featured")
     const [searchQuery, setSearchQuery] = useState("")
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 1200])
-    const [showFilters, setShowFilters] = useState(false)
     const [products, setProducts] = useState<Product[]>([])
     const [categories, setCategories] = useState<Category[]>([])
 
@@ -29,46 +27,13 @@ export default function ProductsPage() {
         fetchCategories().then(setCategories).catch(console.error)
     }, [])
 
-    const addToCart = useCallback((product: Product) => {
-        setCartItems((prev) => {
-            const existing = prev.find((item) => item.product.id === product.id)
-            if (existing) {
-                return prev.map((item) =>
-                    item.product.id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                )
-            }
-            return [...prev, { product, quantity: 1 }]
-        })
-        setCartOpen(true)
-    }, [])
-
-    const updateQuantity = useCallback((productId: number, quantity: number) => {
-        if (quantity === 0) {
-            setCartItems((prev) => prev.filter((item) => item.product.id !== productId))
-        } else {
-            setCartItems((prev) =>
-                prev.map((item) =>
-                    item.product.id === productId ? { ...item, quantity } : item
-                )
-            )
-        }
-    }, [])
-
-    const removeItem = useCallback((productId: number) => {
-        setCartItems((prev) => prev.filter((item) => item.product.id !== productId))
-    }, [])
-
     const filteredProducts = useMemo(() => {
         let filtered = [...products]
 
-        // Category filter
         if (selectedCategory !== "All") {
             filtered = filtered.filter((p) => p.category === selectedCategory)
         }
 
-        // Search filter
         if (searchQuery) {
             const q = searchQuery.toLowerCase()
             filtered = filtered.filter(
@@ -79,12 +44,10 @@ export default function ProductsPage() {
             )
         }
 
-        // Price filter
         filtered = filtered.filter(
             (p) => p.price >= priceRange[0] && p.price <= priceRange[1]
         )
 
-        // Sort
         switch (sortBy) {
             case "price-asc":
                 filtered.sort((a, b) => a.price - b.price)
@@ -103,7 +66,6 @@ export default function ProductsPage() {
         return filtered
     }, [selectedCategory, sortBy, searchQuery, priceRange, products])
 
-    const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
     const allCategories = ["All", ...categories.map((c) => c.name)]
 
     return (
@@ -114,14 +76,8 @@ export default function ProductsPage() {
                 roughness={0.15}
                 displacementScale={3}
             />
-            <Navbar cartCount={cartCount} onCartClick={() => setCartOpen(true)} />
-            <CartSheet
-                isOpen={cartOpen}
-                onClose={() => setCartOpen(false)}
-                items={cartItems}
-                onUpdateQuantity={updateQuantity}
-                onRemoveItem={removeItem}
-            />
+            <Navbar />
+            <CartSheet />
 
             <div className="pt-24 pb-20 px-4">
                 <div className="max-w-7xl mx-auto">
@@ -138,7 +94,6 @@ export default function ProductsPage() {
                     {/* Filters Bar */}
                     <div className="glass rounded-2xl p-4 mb-8">
                         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-                            {/* Search */}
                             <div className="w-full md:w-64">
                                 <Input
                                     placeholder="Search products..."
@@ -148,7 +103,6 @@ export default function ProductsPage() {
                                 />
                             </div>
 
-                            {/* Categories */}
                             <div className="flex-1 flex flex-wrap gap-2">
                                 {allCategories.map((cat) => (
                                     <button
@@ -164,7 +118,6 @@ export default function ProductsPage() {
                                 ))}
                             </div>
 
-                            {/* Sort */}
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}

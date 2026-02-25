@@ -52,13 +52,33 @@ export async function visualSearch(imageFile: File): Promise<SearchResult[]> {
     const formData = new FormData()
     formData.append("image", imageFile)
 
-    const res = await fetch(`${AI_API_BASE}/search/visual`, {
-        method: "POST",
-        body: formData,
-    })
-    if (!res.ok) throw new Error("Visual search failed")
+    let res: Response
+    try {
+        // Use Next.js API proxy to avoid CORS issues
+        res = await fetch("/api/search/visual", {
+            method: "POST",
+            body: formData,
+        })
+    } catch (err: any) {
+        throw new Error(`Search request failed: ${err.message}`)
+    }
+
+    if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: "Unknown error" }))
+        throw new Error(data.error || `Visual search failed (${res.status})`)
+    }
+
     const data = await res.json()
-    return data.results
+
+    // AI service returns [{productId, similarity}] — fetch full product details
+    const results: SearchResult[] = []
+    for (const match of data.results) {
+        const product = await fetchProductById(match.productId)
+        if (product) {
+            results.push({ product, similarity: match.similarity })
+        }
+    }
+    return results
 }
 
 // ─── Auth helpers ────────────────────────────────────────────────

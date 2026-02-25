@@ -3,30 +3,20 @@
 import { X, Minus, Plus, ShoppingBag, ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { CartItem } from "@/lib/types"
 import { formatPrice } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { useCart } from "@/lib/cart-context"
 
-interface CartSheetProps {
-    isOpen: boolean
-    onClose: () => void
-    items: CartItem[]
-    onUpdateQuantity: (productId: number, quantity: number) => void
-    onRemoveItem: (productId: number) => void
-}
+export function CartSheet() {
+    const { cartItems: items, cartOpen: isOpen, setCartOpen, updateQuantity, removeItem } = useCart()
 
-export function CartSheet({
-    isOpen,
-    onClose,
-    items,
-    onUpdateQuantity,
-    onRemoveItem,
-}: CartSheetProps) {
     const total = items.reduce(
         (sum, item) => sum + item.product.price * item.quantity,
         0
     )
     const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
+
+    const onClose = () => setCartOpen(false)
 
     return (
         <>
@@ -101,7 +91,7 @@ export function CartSheet({
                                         <div className="flex items-center gap-2 mt-2">
                                             <button
                                                 onClick={() =>
-                                                    onUpdateQuantity(
+                                                    updateQuantity(
                                                         item.product.id,
                                                         Math.max(0, item.quantity - 1)
                                                     )
@@ -115,7 +105,7 @@ export function CartSheet({
                                             </span>
                                             <button
                                                 onClick={() =>
-                                                    onUpdateQuantity(item.product.id, item.quantity + 1)
+                                                    updateQuantity(item.product.id, item.quantity + 1)
                                                 }
                                                 className="w-7 h-7 rounded-md bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all"
                                             >
@@ -124,7 +114,7 @@ export function CartSheet({
                                         </div>
                                     </div>
                                     <button
-                                        onClick={() => onRemoveItem(item.product.id)}
+                                        onClick={() => removeItem(item.product.id)}
                                         className="self-start opacity-0 group-hover:opacity-100 transition-opacity"
                                     >
                                         <X className="w-4 h-4 text-gray-500 hover:text-white" />

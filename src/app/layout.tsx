@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import { Providers } from "./providers"
 
 export const metadata: Metadata = {
     title: "VISOAI — Smart E-Commerce with Visual AI Search",
@@ -14,7 +15,9 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" className="dark">
-            <body className="min-h-screen bg-background antialiased">{children}</body>
+            <body className="min-h-screen bg-background antialiased">
+                <Providers>{children}</Providers>
+            </body>
         </html>
     )
 }

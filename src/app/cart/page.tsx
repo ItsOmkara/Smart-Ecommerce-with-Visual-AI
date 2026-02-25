@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -21,44 +21,15 @@ import { Footer } from "@/components/layout/footer"
 import { CartSheet } from "@/components/cart/cart-sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { CartItem, Product } from "@/lib/types"
+import { useCart } from "@/lib/cart-context"
+import { useAuth } from "@/lib/auth-context"
 import { formatPrice } from "@/lib/utils"
 
 export default function CartPage() {
-    const [cartItems, setCartItems] = useState<CartItem[]>([])
-    const [cartSheetOpen, setCartSheetOpen] = useState(false)
+    const { cartItems, cartCount, updateQuantity, removeItem } = useCart()
+    const { isLoggedIn } = useAuth()
     const [promoCode, setPromoCode] = useState("")
     const [promoApplied, setPromoApplied] = useState(false)
-
-    const updateQuantity = useCallback((productId: number, quantity: number) => {
-        if (quantity === 0) {
-            setCartItems((prev) => prev.filter((item) => item.product.id !== productId))
-        } else {
-            setCartItems((prev) =>
-                prev.map((item) =>
-                    item.product.id === productId ? { ...item, quantity } : item
-                )
-            )
-        }
-    }, [])
-
-    const removeItem = useCallback((productId: number) => {
-        setCartItems((prev) => prev.filter((item) => item.product.id !== productId))
-    }, [])
-
-    const addToCart = useCallback((product: Product) => {
-        setCartItems((prev) => {
-            const existing = prev.find((item) => item.product.id === product.id)
-            if (existing) {
-                return prev.map((item) =>
-                    item.product.id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                )
-            }
-            return [...prev, { product, quantity: 1 }]
-        })
-    }, [])
 
     const subtotal = cartItems.reduce(
         (sum, item) => sum + item.product.price * item.quantity,
@@ -67,7 +38,6 @@ export default function CartPage() {
     const shipping = subtotal > 200 ? 0 : 15
     const discount = promoApplied ? subtotal * 0.1 : 0
     const total = subtotal + shipping - discount
-    const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
     const handleApplyPromo = () => {
         if (promoCode.toLowerCase() === "save10") {
@@ -83,14 +53,8 @@ export default function CartPage() {
                 roughness={0.15}
                 displacementScale={3}
             />
-            <Navbar cartCount={cartCount} onCartClick={() => setCartSheetOpen(true)} />
-            <CartSheet
-                isOpen={cartSheetOpen}
-                onClose={() => setCartSheetOpen(false)}
-                items={cartItems}
-                onUpdateQuantity={updateQuantity}
-                onRemoveItem={removeItem}
-            />
+            <Navbar />
+            <CartSheet />
 
             <div className="pt-24 pb-20 px-4">
                 <div className="max-w-7xl mx-auto">
@@ -263,11 +227,20 @@ export default function CartPage() {
                                         )}
                                     </div>
 
-                                    <Button variant="glow" size="lg" className="w-full group">
-                                        <CreditCard className="w-5 h-5 mr-2" />
-                                        Checkout — {formatPrice(total)}
-                                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                                    </Button>
+                                    {isLoggedIn ? (
+                                        <Button variant="glow" size="lg" className="w-full group">
+                                            <CreditCard className="w-5 h-5 mr-2" />
+                                            Checkout — {formatPrice(total)}
+                                            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                                        </Button>
+                                    ) : (
+                                        <Link href="/login">
+                                            <Button variant="glow" size="lg" className="w-full group">
+                                                Sign In to Checkout
+                                                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                                            </Button>
+                                        </Link>
+                                    )}
 
                                     {/* Benefits */}
                                     <div className="mt-6 space-y-3">

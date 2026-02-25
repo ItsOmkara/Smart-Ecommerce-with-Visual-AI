@@ -5,6 +5,7 @@ Accepts image uploads and returns visually similar products using CLIP + FAISS.
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from utils.image_utils import load_image_from_bytes
 import logging
+import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -19,8 +20,8 @@ async def visual_search(image: UploadFile = File(...)):
     - Accepts: multipart/form-data with an 'image' field
     - Returns: JSON array of {productId, similarity} sorted by similarity descending
     """
-    # Validate file type
-    if not image.content_type or not image.content_type.startswith("image/"):
+    # Validate file type — also accept when content_type is missing (proxy forwards)
+    if image.content_type and not image.content_type.startswith("image/"):
         raise HTTPException(
             status_code=400,
             detail="Invalid file type. Please upload an image (JPG, PNG, WebP)."
@@ -32,6 +33,12 @@ async def visual_search(image: UploadFile = File(...)):
         raise HTTPException(
             status_code=400,
             detail="Image too large. Maximum size is 10MB."
+        )
+    
+    if len(image_bytes) == 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Empty image file."
         )
     
     pil_image = load_image_from_bytes(image_bytes)
@@ -50,11 +57,19 @@ async def visual_search(image: UploadFile = File(...)):
             detail="AI service is still initializing. Please try again in a moment."
         )
     
-    # Encode the uploaded image
-    query_vector = clip_service.encode_image(pil_image)
-    
-    # Search FAISS index
-    results = faiss_index.search(query_vector, k=10)
-    
-    logger.info(f"Visual search returned {len(results)} results")
-    return {"results": results}
+    try:
+        # Encode the uploaded image
+        logger.info(f"Encoding image ({len(image_bytes)} bytes, type={image.content_type})...")
+        query_vector = clip_service.encode_image(pil_image)
+        
+        # Search FAISS index
+        results = faiss_index.search(query_vector, k=10)
+        
+        logger.info(f"Visual search returned {len(results)} results")
+        return {"results": results}
+    except Exception as e:
+        logger.error(f"Visual search error: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"AI processing error: {str(e)}"
+        )

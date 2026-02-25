@@ -7,10 +7,11 @@ import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles } from "lucide-react"
 import { LiquidEffectAnimation } from "@/components/ui/liquid-effect-animation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { login } from "@/lib/api"
+import { useAuth } from "@/lib/auth-context"
 
 export default function LoginPage() {
     const router = useRouter()
+    const { login } = useAuth()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
