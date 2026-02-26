@@ -204,10 +204,20 @@ export async function clearCart(): Promise<void> {
 
 // ─── Order APIs (require auth) ───────────────────────────────────
 
-export async function placeOrder(): Promise<{ orderId: number; total: number }> {
+export interface ShippingAddress {
+    fullName: string
+    phone: string
+    street: string
+    city: string
+    state: string
+    zip: string
+}
+
+export async function placeOrder(address?: ShippingAddress): Promise<{ orderId: number; total: number }> {
     const res = await fetch(`${API_BASE}/orders`, {
         method: "POST",
         headers: authHeaders(),
+        body: JSON.stringify(address ? { address } : {}),
     })
     const data = await res.json()
     if (!res.ok) throw new Error(data.error || "Failed to place order")

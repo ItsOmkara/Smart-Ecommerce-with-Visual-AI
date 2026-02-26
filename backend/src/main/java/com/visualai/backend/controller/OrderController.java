@@ -19,9 +19,19 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<?> placeOrder(@AuthenticationPrincipal User user) {
+    public ResponseEntity<?> placeOrder(
+            @AuthenticationPrincipal User user,
+            @RequestBody(required = false) Map<String, Object> body) {
         try {
-            Order order = orderService.placeOrder(user);
+            // Extract address from request body if present
+            Map<String, String> address = null;
+            if (body != null && body.containsKey("address")) {
+                @SuppressWarnings("unchecked")
+                Map<String, String> addr = (Map<String, String>) body.get("address");
+                address = addr;
+            }
+
+            Order order = orderService.placeOrder(user, address);
             return ResponseEntity.ok(Map.of(
                     "message", "Order placed successfully",
                     "orderId", order.getId(),

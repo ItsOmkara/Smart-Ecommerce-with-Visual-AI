@@ -2,6 +2,12 @@
 Smart Ecommerce Visual AI Search Service
 FastAPI application that provides visual similarity search using CLIP + FAISS.
 """
+# Fix OpenMP conflict between FAISS (Intel MKL) and PyTorch (LLVM OpenMP)
+# Must be set BEFORE importing torch or faiss
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+os.environ["OMP_NUM_THREADS"] = "1"
+
 import logging
 import numpy as np
 from contextlib import asynccontextmanager
@@ -21,12 +27,18 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Global services (initialized at startup)
-clip_service: CLIPModelService | None = None
-faiss_index: FAISSIndex | None = None
-
 # Database engine
 engine = create_engine(DATABASE_URL)
+
+# ─── Load CLIP model and FAISS index at module level ──────────────
+# This ensures they are available in the same process context as the
+# request handlers, avoiding crashes when accessed from async handlers.
+logger.info("=" * 60)
+logger.info("Starting Visual AI Search Service")
+logger.info("=" * 60)
+
+clip_service = CLIPModelService(CLIP_MODEL_NAME)
+faiss_index = FAISSIndex(dimension=512)
 
 
 def get_products_from_db() -> list[dict]:
@@ -71,46 +83,27 @@ def rebuild_faiss_index():
         logger.error("No embeddings generated. Index not built.")
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Startup and shutdown events."""
-    global clip_service, faiss_index
-    
-    # Startup: Load CLIP model and FAISS index
-    logger.info("=" * 60)
-    logger.info("Starting Visual AI Search Service")
-    logger.info("=" * 60)
-    
-    clip_service = CLIPModelService(CLIP_MODEL_NAME)
-    faiss_index = FAISSIndex(dimension=512)
-    
-    # Try to load existing index from disk
-    if faiss_index.load(FAISS_INDEX_PATH):
-        logger.info("Loaded existing FAISS index from disk.")
-    else:
-        logger.info("No existing index found. Building from database...")
-        try:
-            rebuild_faiss_index()
-        except Exception as e:
-            logger.error(f"Failed to build initial index: {e}")
-            logger.info("You can trigger a rebuild later via POST /api/index/rebuild")
-    
-    logger.info("=" * 60)
-    logger.info("Visual AI Search Service is ready!")
-    logger.info("=" * 60)
-    
-    yield
-    
-    # Shutdown
-    logger.info("Shutting down Visual AI Search Service.")
+# Try to load existing FAISS index from disk
+if faiss_index.load(FAISS_INDEX_PATH):
+    logger.info("Loaded existing FAISS index from disk.")
+else:
+    logger.info("No existing index found. Building from database...")
+    try:
+        rebuild_faiss_index()
+    except Exception as e:
+        logger.error(f"Failed to build initial index: {e}")
+        logger.info("You can trigger a rebuild later via POST /api/index/rebuild")
+
+logger.info("=" * 60)
+logger.info("Visual AI Search Service is ready!")
+logger.info("=" * 60)
 
 
-# Create FastAPI app
+# Create FastAPI app (no lifespan needed — everything loaded above)
 app = FastAPI(
     title="Visual AI Search Service",
     description="Visual similarity search for e-commerce products using CLIP + FAISS",
     version="1.0.0",
-    lifespan=lifespan,
 )
 
 # CORS middleware
@@ -142,4 +135,4 @@ async def root():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
+    uvicorn.run(app, host=HOST, port=PORT)

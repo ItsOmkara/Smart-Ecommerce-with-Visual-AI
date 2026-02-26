@@ -149,3 +149,272 @@ INSERT IGNORE INTO product_sizes (product_id, size_value) VALUES
 (23, 'S'), (23, 'M'), (23, 'L'), (23, 'XL'),
 (24, 'XS'), (24, 'S'), (24, 'M'), (24, 'L'),
 (25, 'One Size');
+
+-- ═══════════════════════════════════════════════════════════════════
+-- NEW CATEGORIES & PRODUCTS — T-Shirts, Jeans, Shoes, Hoodies & more
+-- ═══════════════════════════════════════════════════════════════════
+
+-- New Categories
+INSERT IGNORE INTO categories (id, name, image, count) VALUES
+(7, 'T-Shirts', 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80', 95),
+(8, 'Jeans', 'https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=600&q=80', 78),
+(9, 'Shoes', 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=600&q=80', 110);
+
+-- New Products
+INSERT IGNORE INTO products (id, name, description, price, original_price, image, category, rating, reviews, badge, in_stock) VALUES
+-- T-SHIRTS (26-33)
+(26, 'Classic Cotton Crew Tee', 'Premium 100% organic cotton crew neck t-shirt. Pre-shrunk, double-stitched seams, and tagless comfort. A wardrobe essential in every color.', 39, 55, 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80', 'T-Shirts', 4.5, 523, 'Best Seller', true),
+(27, 'Graphic Print Urban Tee', 'Eye-catching graphic t-shirt with street art-inspired print. Made from soft ringspun cotton with a relaxed fit. Machine washable and fade-resistant.', 49, 65, 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&q=80', 'T-Shirts', 4.3, 347, NULL, true),
+(28, 'Oversized Vintage Wash Tee', 'Oversized vintage-washed t-shirt with a lived-in look. Drop-shoulder design, heavyweight cotton, and distressed details. Perfect for layering.', 55, 75, 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&q=80', 'T-Shirts', 4.6, 289, 'Trending', true),
+(29, 'Striped Polo T-Shirt', 'Classic striped polo shirt with ribbed collar and two-button placket. Made from breathable pique cotton. Smart casual essential.', 65, 85, 'https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=600&q=80', 'T-Shirts', 4.4, 198, NULL, true),
+(30, 'V-Neck Essential Tee', 'Slim-fit V-neck t-shirt in premium Supima cotton. Ultra-soft with a modern tapered silhouette. Reinforced shoulder seams for durability.', 35, 50, 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80', 'T-Shirts', 4.2, 412, NULL, true),
+(31, 'Athletic Performance Tee', 'Moisture-wicking performance t-shirt with four-way stretch. Anti-odor technology, flatlock seams, and reflective logo. Ideal for workouts.', 45, 60, 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=600&q=80', 'T-Shirts', 4.7, 634, 'New', true),
+(32, 'Henley Long Sleeve Tee', 'Casual henley t-shirt with three-button placket and rolled sleeve detail. Made from soft jersey cotton blend. Relaxed yet polished.', 55, 70, 'https://images.unsplash.com/photo-1618517351616-38fb9c5210c6?w=600&q=80', 'T-Shirts', 4.5, 176, NULL, true),
+(33, 'Black Minimal Pocket Tee', 'Minimal black t-shirt with single chest pocket. Premium heavyweight cotton with a boxy fit. Clean and versatile for any style.', 42, NULL, 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80', 'T-Shirts', 4.6, 445, NULL, true),
+
+-- JEANS (34-38)
+(34, 'Slim Fit Dark Wash Jeans', 'Classic slim-fit jeans in dark indigo wash. Premium stretch denim with 5-pocket styling. Tapered leg and mid-rise waist for a modern silhouette.', 89, 120, 'https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=600&q=80', 'Jeans', 4.6, 387, 'Best Seller', true),
+(35, 'Relaxed Fit Light Wash Jeans', 'Relaxed-fit jeans in a faded light wash with natural whisker details. Comfortable straight leg with classic 5-pocket construction. Easy weekend vibes.', 79, 110, 'https://images.unsplash.com/photo-1604176354204-9268737828e4?w=600&q=80', 'Jeans', 4.4, 245, NULL, true),
+(36, 'Distressed Boyfriend Jeans', 'Trendy boyfriend jeans with artful distressing and rolled cuffs. Mid-rise relaxed fit in medium wash denim. Effortlessly cool.', 95, 130, 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80', 'Jeans', 4.5, 312, 'Trending', true),
+(37, 'Black Skinny Stretch Jeans', 'Sleek black skinny jeans with maximum stretch for all-day comfort. High-rise fit with ankle-length hem. A go-to for night out looks.', 85, 115, 'https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=600&q=80', 'Jeans', 4.3, 534, NULL, true),
+(38, 'Wide Leg Vintage Jeans', 'Retro-inspired wide-leg jeans in a vintage medium wash. High-waisted with exaggerated flare and raw hem. 70s style meets modern comfort.', 99, 135, 'https://images.unsplash.com/photo-1475178626620-a4d074967571?w=600&q=80', 'Jeans', 4.7, 178, 'New', true),
+
+-- SHOES (39-43)
+(39, 'Classic Leather Oxford Shoes', 'Handcrafted leather oxford shoes with Goodyear welt construction. Full-grain calfskin, leather sole, and blake-stitched construction. Timeless elegance.', 245, 320, 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=600&q=80', 'Shoes', 4.8, 145, 'Premium', true),
+(40, 'Suede Chelsea Boots', 'Sleek suede Chelsea boots with elastic side panels and pull tab. Cushioned insole and rubber-blend outsole. Versatile from casual to formal.', 198, 260, 'https://images.unsplash.com/photo-1638247025967-b4e38f787b76?w=600&q=80', 'Shoes', 4.7, 234, NULL, true),
+(41, 'Canvas Low-Top Sneakers', 'Minimalist canvas sneakers with vulcanized rubber sole. Lightweight, breathable, and perfect for everyday wear. Classic plimsoll silhouette.', 65, 85, 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&q=80', 'Shoes', 4.4, 678, 'Best Seller', true),
+(42, 'Leather Loafers', 'Italian leather penny loafers with hand-sewn moccasin construction. Cushioned footbed and flexible rubber outsole. Slip-on sophistication.', 185, 240, 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=600&q=80', 'Shoes', 4.6, 167, NULL, true),
+(43, 'Hiking Trail Boots', 'Rugged waterproof hiking boots with Vibram outsole. Full-grain leather and Cordura nylon upper. Gore-Tex lining for all-weather protection.', 215, 280, 'https://images.unsplash.com/photo-1520219306100-ec4afeeefe58?w=600&q=80', 'Shoes', 4.8, 198, 'Outdoor', true),
+
+-- MORE JACKETS & HOODIES (44-45)
+(44, 'Zip-Up Fleece Hoodie', 'Cozy full-zip fleece hoodie with drawstring hood and kangaroo pockets. Anti-pill fleece fabric with ribbed cuffs and hem. Weekend essential.', 75, 99, 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80', 'Jackets', 4.5, 456, NULL, true),
+(45, 'Bomber Jacket', 'Classic bomber jacket with ribbed collar, cuffs, and hem. Water-resistant nylon shell with quilted lining. Zip front with snap storm flap.', 165, 220, 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80', 'Jackets', 4.6, 312, 'Trending', true);
+
+-- New Product Images
+INSERT IGNORE INTO product_images (product_id, image_url) VALUES
+(26, 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80'),
+(26, 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80'),
+(27, 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&q=80'),
+(27, 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&q=80'),
+(28, 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&q=80'),
+(28, 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80'),
+(29, 'https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=600&q=80'),
+(30, 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80'),
+(30, 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=600&q=80'),
+(31, 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=600&q=80'),
+(32, 'https://images.unsplash.com/photo-1618517351616-38fb9c5210c6?w=600&q=80'),
+(33, 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80'),
+(33, 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80'),
+(34, 'https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=600&q=80'),
+(34, 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80'),
+(35, 'https://images.unsplash.com/photo-1604176354204-9268737828e4?w=600&q=80'),
+(36, 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80'),
+(37, 'https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=600&q=80'),
+(38, 'https://images.unsplash.com/photo-1475178626620-a4d074967571?w=600&q=80'),
+(39, 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=600&q=80'),
+(40, 'https://images.unsplash.com/photo-1638247025967-b4e38f787b76?w=600&q=80'),
+(41, 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&q=80'),
+(42, 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=600&q=80'),
+(43, 'https://images.unsplash.com/photo-1520219306100-ec4afeeefe58?w=600&q=80'),
+(44, 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80'),
+(45, 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80');
+
+-- New Product Colors
+INSERT IGNORE INTO product_colors (product_id, color_hex) VALUES
+(26, '#FFFFFF'), (26, '#000000'), (26, '#808080'), (26, '#000080'),
+(27, '#000000'), (27, '#FFFFFF'), (27, '#FF4500'),
+(28, '#D2B48C'), (28, '#808080'), (28, '#000000'),
+(29, '#FFFFFF'), (29, '#000080'), (29, '#FF0000'),
+(30, '#000000'), (30, '#FFFFFF'), (30, '#808080'), (30, '#006400'),
+(31, '#000000'), (31, '#1E90FF'), (31, '#FF0000'),
+(32, '#696969'), (32, '#8B0000'), (32, '#FFFFFF'),
+(33, '#000000'),
+(34, '#191970'), (34, '#000000'),
+(35, '#87CEEB'), (35, '#D3D3D3'),
+(36, '#4682B4'), (36, '#87CEEB'),
+(37, '#000000'),
+(38, '#4682B4'), (38, '#D2B48C'),
+(39, '#000000'), (39, '#8B4513'), (39, '#2F4F4F'),
+(40, '#D2B48C'), (40, '#000000'), (40, '#696969'),
+(41, '#FFFFFF'), (41, '#000000'), (41, '#FF0000'),
+(42, '#8B4513'), (42, '#000000'),
+(43, '#8B4513'), (43, '#000000'),
+(44, '#808080'), (44, '#000000'), (44, '#000080'),
+(45, '#000000'), (45, '#556B2F'), (45, '#191970');
+
+-- New Product Sizes
+INSERT IGNORE INTO product_sizes (product_id, size_value) VALUES
+(26, 'XS'), (26, 'S'), (26, 'M'), (26, 'L'), (26, 'XL'), (26, 'XXL'),
+(27, 'S'), (27, 'M'), (27, 'L'), (27, 'XL'),
+(28, 'M'), (28, 'L'), (28, 'XL'), (28, 'XXL'),
+(29, 'S'), (29, 'M'), (29, 'L'), (29, 'XL'),
+(30, 'XS'), (30, 'S'), (30, 'M'), (30, 'L'), (30, 'XL'),
+(31, 'S'), (31, 'M'), (31, 'L'), (31, 'XL'),
+(32, 'S'), (32, 'M'), (32, 'L'), (32, 'XL'),
+(33, 'S'), (33, 'M'), (33, 'L'), (33, 'XL'), (33, 'XXL'),
+(34, '28'), (34, '30'), (34, '32'), (34, '34'), (34, '36'),
+(35, '28'), (35, '30'), (35, '32'), (35, '34'), (35, '36'),
+(36, '26'), (36, '28'), (36, '30'), (36, '32'),
+(37, '26'), (37, '28'), (37, '30'), (37, '32'), (37, '34'),
+(38, '26'), (38, '28'), (38, '30'), (38, '32'),
+(39, '7'), (39, '8'), (39, '9'), (39, '10'), (39, '11'),
+(40, '7'), (40, '8'), (40, '9'), (40, '10'), (40, '11'),
+(41, '6'), (41, '7'), (41, '8'), (41, '9'), (41, '10'), (41, '11'),
+(42, '7'), (42, '8'), (42, '9'), (42, '10'), (42, '11'),
+(43, '7'), (43, '8'), (43, '9'), (43, '10'), (43, '11'), (43, '12'),
+(44, 'S'), (44, 'M'), (44, 'L'), (44, 'XL'), (44, 'XXL'),
+(45, 'S'), (45, 'M'), (45, 'L'), (45, 'XL');
+
+-- ═══════════════════════════════════════════════════════════════════
+-- EXPANDED CATALOG — Electronics, Furniture, Sports, Home, Jewelry, Hats
+-- ═══════════════════════════════════════════════════════════════════
+
+INSERT IGNORE INTO categories (id, name, image, count) VALUES
+(10, 'Electronics', 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80', 85),
+(11, 'Furniture', 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80', 64),
+(12, 'Sports', 'https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=600&q=80', 72),
+(13, 'Home & Kitchen', 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80', 58),
+(14, 'Jewelry', 'https://images.unsplash.com/photo-1515562141589-67f0d999b7f6?w=600&q=80', 43),
+(15, 'Hats & Caps', 'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&q=80', 37);
+
+-- ELECTRONICS (46-55)
+INSERT IGNORE INTO products (id, name, description, price, original_price, image, category, rating, reviews, badge, in_stock) VALUES
+(46, 'Wireless Noise-Cancelling Headphones', 'Premium over-ear headphones with active noise cancellation, 30-hour battery life, and Hi-Res Audio support. Plush memory foam ear cups for all-day comfort.', 299, 399, 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80', 'Electronics', 4.8, 1234, 'Best Seller', true),
+(47, 'Portable Bluetooth Speaker', 'Waterproof portable speaker with 360-degree sound and deep bass. 20-hour battery, built-in microphone, and USB-C charging. Perfect for outdoor adventures.', 89, 120, 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&q=80', 'Electronics', 4.5, 876, NULL, true),
+(48, 'Mirrorless Digital Camera', 'Professional mirrorless camera with 24.2MP sensor, 4K video, and 5-axis image stabilization. Compact body with weather-sealed magnesium alloy construction.', 1299, 1599, 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80', 'Electronics', 4.9, 345, 'Premium', true),
+(49, 'Wireless Earbuds Pro', 'True wireless earbuds with adaptive noise cancellation and spatial audio. IPX5 water resistance, 8-hour battery with 24-hour charging case, and touch controls.', 179, 229, 'https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=600&q=80', 'Electronics', 4.7, 2341, 'Trending', true),
+(50, 'Smart Home Speaker', 'Voice-controlled smart speaker with premium sound, built-in virtual assistant, and smart home hub. Sleek fabric design that blends into any room.', 129, 169, 'https://images.unsplash.com/photo-1543512214-318c7553f230?w=600&q=80', 'Electronics', 4.4, 987, NULL, true),
+(51, 'Mechanical Gaming Keyboard', 'RGB mechanical keyboard with hot-swappable switches, aluminum frame, and programmable macro keys. N-key rollover and detachable USB-C cable.', 149, 199, 'https://images.unsplash.com/photo-1541140532154-b024d1b4e5d4?w=600&q=80', 'Electronics', 4.6, 567, 'New', true),
+(52, 'Wireless Gaming Mouse', 'Ultra-lightweight wireless gaming mouse with 25K DPI sensor, 70-hour battery life, and programmable buttons. Ambidextrous design with RGB lighting.', 79, 99, 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=600&q=80', 'Electronics', 4.5, 743, NULL, true),
+(53, 'Tablet with Stylus', 'High-resolution tablet with 11-inch display, stylus support, and desktop-class chip. Perfect for digital art, note-taking, and entertainment.', 599, 749, 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80', 'Electronics', 4.7, 432, 'Premium', true),
+(54, 'Action Camera 4K', 'Rugged waterproof action camera with 4K60 video, HyperSmooth stabilization, and voice control. Compact design with front-facing screen for vlogging.', 349, 449, 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600&q=80', 'Electronics', 4.6, 654, NULL, true),
+(55, 'USB-C Laptop Charger', 'Compact 65W GaN USB-C charger with fast charging for laptops, tablets, and phones. Foldable prongs and universal voltage for travel.', 45, 65, 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&q=80', 'Electronics', 4.3, 321, NULL, true),
+
+-- FURNITURE (56-61)
+(56, 'Mid-Century Modern Sofa', 'Elegant mid-century sofa with tufted back, tapered wooden legs, and premium linen upholstery. Seats 3 comfortably with removable cushion covers.', 899, 1199, 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80', 'Furniture', 4.7, 234, 'Best Seller', true),
+(57, 'Ergonomic Office Chair', 'Adjustable ergonomic desk chair with lumbar support, breathable mesh back, and 4D armrests. Certified for 8+ hours of comfortable sitting.', 449, 599, 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&q=80', 'Furniture', 4.8, 567, 'Trending', true),
+(58, 'Scandinavian Dining Table', 'Minimalist oak dining table with clean lines and sturdy construction. Seats 6, with natural wood grain finish and rounded edges.', 599, 799, 'https://images.unsplash.com/photo-1577140917170-285929fb55b7?w=600&q=80', 'Furniture', 4.6, 178, NULL, true),
+(59, 'Modern Floor Lamp', 'Arc floor lamp with brushed brass finish and marble base. Adjustable arm with linen drum shade. Adds warmth and style to any room.', 189, 249, 'https://images.unsplash.com/photo-1507473885765-e6ed057ab3fe?w=600&q=80', 'Furniture', 4.4, 312, NULL, true),
+(60, 'Bookshelf Wall Unit', 'Industrial-style bookshelf with solid wood shelves and black metal frame. 5 tiers for books, plants, and decor. Easy assembly.', 299, 399, 'https://images.unsplash.com/photo-1594620302200-9a762244a156?w=600&q=80', 'Furniture', 4.5, 198, NULL, true),
+(61, 'Velvet Accent Chair', 'Luxurious velvet accent chair with gold-finished metal legs. Comfortable foam cushion and button-tufted back. Statement piece for living rooms.', 349, 450, 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80', 'Furniture', 4.7, 145, 'Premium', true),
+
+-- SPORTS (62-67)
+(62, 'Yoga Mat Premium', 'Extra-thick 6mm yoga mat with non-slip surface and alignment lines. Made from eco-friendly TPE material. Includes carry strap.', 45, 65, 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=600&q=80', 'Sports', 4.6, 876, 'Best Seller', true),
+(63, 'Adjustable Dumbbell Set', 'Space-saving adjustable dumbbells from 5-50 lbs. Quick-change weight selection dial. Replaces 15 sets of traditional dumbbells.', 349, 449, 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80', 'Sports', 4.8, 432, 'Premium', true),
+(64, 'Tennis Racket Pro', 'Professional graphite tennis racket with vibration dampening technology. 100 sq in head size, 11.2 oz weight, and pre-strung with multi-filament string.', 189, 249, 'https://images.unsplash.com/photo-1551773188-d63e5d164d1c?w=600&q=80', 'Sports', 4.5, 234, NULL, true),
+(65, 'Basketball Official Size', 'Official size and weight indoor/outdoor basketball with deep channel design for superior grip. Composite leather cover with moisture-absorbing technology.', 35, 49, 'https://images.unsplash.com/photo-1494199505258-5f95387f933a?w=600&q=80', 'Sports', 4.4, 567, NULL, true),
+(66, 'Cycling Helmet', 'Lightweight ventilated cycling helmet with MIPS protection system. Adjustable fit dial, removable visor, and reflective accents for visibility.', 95, 130, 'https://images.unsplash.com/photo-1557803175-2dfbd6917f8d?w=600&q=80', 'Sports', 4.7, 345, 'New', true),
+(67, 'Resistance Bands Set', 'Complete set of 5 resistance bands with handles, door anchor, and ankle straps. Stackable up to 150 lbs. Includes carrying bag and exercise guide.', 29, 45, 'https://images.unsplash.com/photo-1598289431512-b97b0917affc?w=600&q=80', 'Sports', 4.3, 1234, NULL, true),
+
+-- HOME & KITCHEN (68-73)
+(68, 'French Press Coffee Maker', 'Classic 34oz French press with double-wall stainless steel and vacuum insulation. Keeps coffee hot for hours. Dishwasher-safe filter and plunger.', 39, 55, 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80', 'Home & Kitchen', 4.6, 987, 'Best Seller', true),
+(69, 'Cast Iron Skillet', 'Pre-seasoned 12-inch cast iron skillet with helper handle. Even heat distribution for perfect searing. Oven-safe up to 500°F.', 45, 65, 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&q=80', 'Home & Kitchen', 4.8, 765, NULL, true),
+(70, 'Ceramic Plant Pot Set', 'Set of 3 minimalist ceramic planters with bamboo saucers. Drainage holes for healthy plants. Matte finish in white, gray, and terracotta.', 35, 49, 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80', 'Home & Kitchen', 4.4, 432, NULL, true),
+(71, 'Scented Candle Collection', 'Luxury hand-poured soy candle with wooden wick. Clean burning with essential oil fragrances. 60-hour burn time in a reusable glass jar.', 28, 38, 'https://images.unsplash.com/photo-1602028915047-37269d1a73f7?w=600&q=80', 'Home & Kitchen', 4.5, 654, 'Trending', true),
+(72, 'Kitchen Knife Set', 'Professional 7-piece knife set with high-carbon stainless steel blades and ergonomic handles. Includes magnetic wall-mount strip.', 129, 179, 'https://images.unsplash.com/photo-1593618998160-e34014e67546?w=600&q=80', 'Home & Kitchen', 4.7, 345, 'Premium', true),
+(73, 'Minimalist Wall Clock', 'Silent sweep 12-inch wall clock with Scandinavian-inspired design. Solid wood frame with clean numerals. Battery-operated.', 49, 69, 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=600&q=80', 'Home & Kitchen', 4.3, 234, NULL, true),
+
+-- JEWELRY (74-77)
+(74, 'Gold Pendant Necklace', 'Delicate 14K gold-plated pendant necklace with cubic zirconia stone. Adjustable 16-18 inch chain with lobster clasp. Tarnish-resistant.', 65, 89, 'https://images.unsplash.com/photo-1515562141589-67f0d999b7f6?w=600&q=80', 'Jewelry', 4.6, 567, 'Best Seller', true),
+(75, 'Silver Hoop Earrings', 'Classic sterling silver hoop earrings with click-top closure. Lightweight and hypoallergenic. Available in 25mm and 35mm sizes.', 39, 55, 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80', 'Jewelry', 4.5, 876, NULL, true),
+(76, 'Leather Wrap Bracelet', 'Hand-braided genuine leather wrap bracelet with stainless steel magnetic clasp. Adjustable fit. Unisex design.', 29, 42, 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80', 'Jewelry', 4.4, 345, NULL, true),
+(77, 'Diamond Stud Earrings', 'Lab-created diamond stud earrings in 14K white gold setting. 1 carat total weight with brilliant cut. Push-back closure.', 199, 299, 'https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?w=600&q=80', 'Jewelry', 4.9, 234, 'Luxury', true),
+
+-- HATS & CAPS (78-80)
+(78, 'Classic Baseball Cap', 'Adjustable cotton twill baseball cap with embroidered logo. Pre-curved brim and breathable eyelets. One size fits most.', 25, 35, 'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&q=80', 'Hats & Caps', 4.3, 1234, NULL, true),
+(79, 'Wool Fedora Hat', 'Timeless wool felt fedora with grosgrain ribbon band. Water-repellent finish and satin-lined interior. Available in multiple sizes.', 75, 99, 'https://images.unsplash.com/photo-1514327605112-b887c0e61c0a?w=600&q=80', 'Hats & Caps', 4.6, 234, 'Premium', true),
+(80, 'Knit Beanie', 'Soft ribbed knit beanie in 100% merino wool. Fold-over cuff design with fleece-lined interior for extra warmth. Machine washable.', 29, 39, 'https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&q=80', 'Hats & Caps', 4.5, 567, NULL, true);
+
+-- New Product Images
+INSERT IGNORE INTO product_images (product_id, image_url) VALUES
+(46, 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80'),
+(47, 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&q=80'),
+(48, 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80'),
+(49, 'https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=600&q=80'),
+(50, 'https://images.unsplash.com/photo-1543512214-318c7553f230?w=600&q=80'),
+(51, 'https://images.unsplash.com/photo-1541140532154-b024d1b4e5d4?w=600&q=80'),
+(52, 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=600&q=80'),
+(53, 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80'),
+(54, 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600&q=80'),
+(55, 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&q=80'),
+(56, 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80'),
+(57, 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&q=80'),
+(58, 'https://images.unsplash.com/photo-1577140917170-285929fb55b7?w=600&q=80'),
+(59, 'https://images.unsplash.com/photo-1507473885765-e6ed057ab3fe?w=600&q=80'),
+(60, 'https://images.unsplash.com/photo-1594620302200-9a762244a156?w=600&q=80'),
+(61, 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80'),
+(62, 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=600&q=80'),
+(63, 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80'),
+(64, 'https://images.unsplash.com/photo-1551773188-d63e5d164d1c?w=600&q=80'),
+(65, 'https://images.unsplash.com/photo-1494199505258-5f95387f933a?w=600&q=80'),
+(66, 'https://images.unsplash.com/photo-1557803175-2dfbd6917f8d?w=600&q=80'),
+(67, 'https://images.unsplash.com/photo-1598289431512-b97b0917affc?w=600&q=80'),
+(68, 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80'),
+(69, 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&q=80'),
+(70, 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80'),
+(71, 'https://images.unsplash.com/photo-1602028915047-37269d1a73f7?w=600&q=80'),
+(72, 'https://images.unsplash.com/photo-1593618998160-e34014e67546?w=600&q=80'),
+(73, 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=600&q=80'),
+(74, 'https://images.unsplash.com/photo-1515562141589-67f0d999b7f6?w=600&q=80'),
+(75, 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80'),
+(76, 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80'),
+(77, 'https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?w=600&q=80'),
+(78, 'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&q=80'),
+(79, 'https://images.unsplash.com/photo-1514327605112-b887c0e61c0a?w=600&q=80'),
+(80, 'https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&q=80');
+
+-- New Product Colors
+INSERT IGNORE INTO product_colors (product_id, color_hex) VALUES
+(46, '#000000'), (46, '#FFFFFF'), (46, '#C0C0C0'),
+(47, '#000000'), (47, '#2196F3'), (47, '#FF5722'),
+(48, '#000000'), (48, '#C0C0C0'),
+(49, '#000000'), (49, '#FFFFFF'),
+(50, '#696969'), (50, '#FFFFFF'), (50, '#1E90FF'),
+(51, '#000000'),
+(52, '#000000'), (52, '#FFFFFF'),
+(53, '#808080'), (53, '#000000'),
+(54, '#000000'),
+(55, '#FFFFFF'), (55, '#000000'),
+(56, '#D2B48C'), (56, '#696969'), (56, '#006400'),
+(57, '#000000'), (57, '#696969'),
+(58, '#D2B48C'),
+(59, '#C0A060'), (59, '#000000'),
+(60, '#000000'),
+(61, '#006400'), (61, '#000080'), (61, '#800020'),
+(62, '#800080'), (62, '#000000'), (62, '#1E90FF'),
+(63, '#000000'),
+(64, '#FFFFFF'), (64, '#000000'),
+(65, '#FF8C00'),
+(66, '#000000'), (66, '#FFFFFF'), (66, '#FF0000'),
+(67, '#FF0000'), (67, '#000000'), (67, '#FFD700'),
+(68, '#C0C0C0'), (68, '#000000'),
+(69, '#000000'),
+(70, '#FFFFFF'), (70, '#808080'), (70, '#CD853F'),
+(71, '#FFFDD0'), (71, '#E6E6FA'),
+(72, '#C0C0C0'),
+(73, '#000000'), (73, '#FFFFFF'),
+(74, '#FFD700'), (74, '#C0C0C0'),
+(75, '#C0C0C0'), (75, '#FFD700'),
+(76, '#8B4513'), (76, '#000000'),
+(77, '#FFFFFF'),
+(78, '#000000'), (78, '#FFFFFF'), (78, '#000080'),
+(79, '#000000'), (79, '#D2B48C'), (79, '#696969'),
+(80, '#000000'), (80, '#696969'), (80, '#8B0000');
+
+-- New Product Sizes
+INSERT IGNORE INTO product_sizes (product_id, size_value) VALUES
+(46, 'One Size'), (47, 'One Size'), (48, 'One Size'),
+(49, 'One Size'), (50, 'One Size'), (51, 'One Size'),
+(52, 'One Size'), (53, 'One Size'), (54, 'One Size'),
+(55, 'One Size'),
+(56, 'One Size'), (57, 'One Size'), (58, 'One Size'),
+(59, 'One Size'), (60, 'One Size'), (61, 'One Size'),
+(62, 'One Size'), (63, 'One Size'), (64, 'One Size'),
+(65, 'One Size'), (66, 'S'), (66, 'M'), (66, 'L'),
+(67, 'One Size'),
+(68, 'One Size'), (69, 'One Size'), (70, 'One Size'),
+(71, 'One Size'), (72, 'One Size'), (73, 'One Size'),
+(74, 'One Size'), (75, 'One Size'), (76, 'One Size'),
+(77, 'One Size'),
+(78, 'One Size'), (79, 'S'), (79, 'M'), (79, 'L'),
+(80, 'One Size');

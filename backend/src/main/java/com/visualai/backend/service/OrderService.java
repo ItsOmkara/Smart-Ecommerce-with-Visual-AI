@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class OrderService {
     private final CartRepository cartRepository;
 
     @Transactional
-    public Order placeOrder(User user) {
+    public Order placeOrder(User user, Map<String, String> address) {
         List<CartItem> cartItems = cartRepository.findByUser(user);
 
         if (cartItems.isEmpty()) {
@@ -41,6 +42,16 @@ public class OrderService {
                 .status("PLACED")
                 .createdAt(LocalDateTime.now())
                 .build();
+
+        // Set shipping address if provided
+        if (address != null) {
+            order.setShippingName(address.getOrDefault("fullName", ""));
+            order.setShippingPhone(address.getOrDefault("phone", ""));
+            order.setShippingStreet(address.getOrDefault("street", ""));
+            order.setShippingCity(address.getOrDefault("city", ""));
+            order.setShippingState(address.getOrDefault("state", ""));
+            order.setShippingZip(address.getOrDefault("zip", ""));
+        }
 
         // Convert cart items to order items
         for (CartItem cartItem : cartItems) {

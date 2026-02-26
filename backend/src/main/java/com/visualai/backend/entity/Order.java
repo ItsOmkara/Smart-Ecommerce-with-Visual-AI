@@ -46,4 +46,12 @@ public class Order {
     @Column(nullable = false)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    // Shipping address
+    private String shippingName;
+    private String shippingPhone;
+    private String shippingStreet;
+    private String shippingCity;
+    private String shippingState;
+    private String shippingZip;
 }
