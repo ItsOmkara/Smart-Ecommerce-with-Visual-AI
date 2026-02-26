@@ -232,12 +232,6 @@ The frontend will start on **http://localhost:3000**.
 
 ---
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
 ## 👤 Author
 
 **Omkar Birajdar** — [@ItsOmkara](https://github.com/ItsOmkara)
