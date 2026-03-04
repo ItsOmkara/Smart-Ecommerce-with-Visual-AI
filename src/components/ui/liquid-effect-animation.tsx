@@ -69,13 +69,20 @@ export function LiquidEffectAnimation({
             <div
                 className="absolute inset-0 w-full h-full"
                 style={{
-                    background: "radial-gradient(ellipse at 50% 0%, #1a103d 0%, #0d0b1a 50%, #000000 100%)",
+                    background: "radial-gradient(ellipse at 50% 0%, #0a1628 0%, #060d1a 50%, #000000 100%)",
                 }}
             />
             <canvas
                 ref={canvasRef}
                 id="liquid-canvas"
                 className={`fixed inset-0 w-full h-full transition-opacity duration-1000 ${loaded ? "opacity-100" : "opacity-0"}`}
+            />
+            {/* Dark gradient overlay for text readability */}
+            <div
+                className="absolute inset-0 w-full h-full pointer-events-none"
+                style={{
+                    background: "linear-gradient(to bottom, rgba(15,23,42,0.45) 0%, transparent 40%, transparent 60%, rgba(15,23,42,0.80) 100%)",
+                }}
             />
         </div>
     )

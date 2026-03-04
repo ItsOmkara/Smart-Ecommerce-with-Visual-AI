@@ -25,13 +25,13 @@ export function Navbar() {
     const { cartCount, setCartOpen } = useCart()
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 glass">
+        <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-slate-900/60 border-b border-cyan-500/20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center shadow-lg shadow-violet-500/25 group-hover:shadow-violet-500/40 transition-shadow">
-                            <Sparkles className="w-5 h-5 text-white" />
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-teal-500 flex items-center justify-center shadow-lg shadow-cyan-500/25 group-hover:shadow-cyan-500/40 transition-shadow">
+                            <Sparkles className="w-5 h-5 text-slate-900" />
                         </div>
                         <span className="text-lg font-bold text-white hidden sm:block">
                             VISO<span className="gradient-text">AI</span>
@@ -45,14 +45,14 @@ export function Navbar() {
                             className="text-sm text-gray-300 hover:text-white transition-colors relative group"
                         >
                             Home
-                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-violet-500 to-pink-500 group-hover:w-full transition-all duration-300" />
+                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-teal-500 group-hover:w-full transition-all duration-300" />
                         </Link>
                         <Link
                             href="/products"
                             className="text-sm text-gray-300 hover:text-white transition-colors relative group"
                         >
                             Products
-                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-violet-500 to-pink-500 group-hover:w-full transition-all duration-300" />
+                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-teal-500 group-hover:w-full transition-all duration-300" />
                         </Link>
                         <Link
                             href="/search"
@@ -60,7 +60,7 @@ export function Navbar() {
                         >
                             <Camera className="w-4 h-4" />
                             Visual Search
-                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-violet-500 to-pink-500 group-hover:w-full transition-all duration-300" />
+                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-teal-500 group-hover:w-full transition-all duration-300" />
                         </Link>
                     </div>
 
@@ -78,7 +78,7 @@ export function Navbar() {
                         >
                             <ShoppingBag className="w-5 h-5" />
                             {cartCount > 0 && (
-                                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 text-white text-[10px] font-bold flex items-center justify-center animate-bounce">
+                                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-900 text-[10px] font-bold flex items-center justify-center animate-bounce">
                                     {cartCount}
                                 </span>
                             )}
@@ -93,7 +93,7 @@ export function Navbar() {
                                             onClick={() => setUserMenuOpen(!userMenuOpen)}
                                             className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 transition-all border border-white/10"
                                         >
-                                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold">
+                                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 flex items-center justify-center text-slate-900 text-xs font-bold">
                                                 {user.name.charAt(0).toUpperCase()}
                                             </div>
                                             <span className="text-sm text-white font-medium max-w-[100px] truncate">
@@ -191,7 +191,7 @@ export function Navbar() {
                                     {isLoggedIn && user ? (
                                         <>
                                             <div className="flex items-center gap-3 px-3 py-2">
-                                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold">
+                                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 flex items-center justify-center text-slate-900 text-sm font-bold">
                                                     {user.name.charAt(0).toUpperCase()}
                                                 </div>
                                                 <div>

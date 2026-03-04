@@ -53,7 +53,7 @@ export default function HomePage() {
             {/* Hero Section */}
             <section className="relative pt-32 pb-20 px-4">
                 <div className="max-w-7xl mx-auto">
-                    <div className="glass rounded-3xl p-8 md:p-16 text-center">
+                    <div className="bg-slate-900/80 border border-cyan-400/30 rounded-3xl p-8 md:p-16 text-center shadow-[0_0_30px_rgba(34,211,238,0.15)]">
                         <Badge variant="default" className="mb-6 text-sm px-4 py-1.5">
                             <Sparkles className="w-3.5 h-3.5 mr-1.5" />
                             AI-Powered Visual Search
@@ -65,7 +65,7 @@ export default function HomePage() {
                             <span className="gradient-text">Visual AI</span>
                         </h1>
 
-                        <p className="mt-6 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                        <p className="mt-6 text-lg md:text-xl text-cyan-100/80 max-w-2xl mx-auto leading-relaxed">
                             Upload any image and discover similar products instantly.
                             Our AI understands style, color, and pattern to find your
                             perfect match.
@@ -94,8 +94,8 @@ export default function HomePage() {
                                 { value: "0.3s", label: "Search Speed" },
                             ].map((stat) => (
                                 <div key={stat.label}>
-                                    <p className="text-2xl md:text-3xl font-bold gradient-text">{stat.value}</p>
-                                    <p className="text-sm text-gray-500 mt-1">{stat.label}</p>
+                                    <p className="text-2xl md:text-3xl font-bold font-mono text-cyan-400">{stat.value}</p>
+                                    <p className="text-sm text-cyan-100/60 mt-1">{stat.label}</p>
                                 </div>
                             ))}
                         </div>
@@ -110,7 +110,7 @@ export default function HomePage() {
                         <h2 className="text-3xl md:text-4xl font-bold text-white">
                             How <span className="gradient-text">Visual Search</span> Works
                         </h2>
-                        <p className="text-gray-400 mt-4 max-w-xl mx-auto">
+                        <p className="text-cyan-100/60 mt-4 max-w-xl mx-auto">
                             Three simple steps to find exactly what you&apos;re looking for
                         </p>
                     </div>
@@ -140,16 +140,16 @@ export default function HomePage() {
                                 key={item.step}
                                 className="glass-card rounded-2xl p-8 text-center group"
                             >
-                                <div className="text-xs font-bold text-violet-500/50 mb-4">
+                                <div className="text-xs font-bold text-cyan-500/60 mb-4 tracking-widest">
                                     STEP {item.step}
                                 </div>
-                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500/20 to-pink-500/20 flex items-center justify-center mx-auto mb-6 group-hover:from-violet-500/30 group-hover:to-pink-500/30 transition-all">
-                                    <item.icon className="w-7 h-7 text-violet-400" />
+                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 flex items-center justify-center mx-auto mb-6 group-hover:from-cyan-500/30 group-hover:to-teal-500/30 transition-all">
+                                    <item.icon className="w-7 h-7 text-cyan-400" />
                                 </div>
                                 <h3 className="text-lg font-semibold text-white mb-2">
                                     {item.title}
                                 </h3>
-                                <p className="text-sm text-gray-400 leading-relaxed">
+                                <p className="text-sm text-cyan-100/60 leading-relaxed">
                                     {item.desc}
                                 </p>
                             </div>
@@ -171,7 +171,7 @@ export default function HomePage() {
                             </p>
                         </div>
                         <Link href="/products">
-                            <Button variant="ghost" className="text-violet-400 hover:text-violet-300">
+                            <Button variant="ghost" className="text-cyan-400 hover:text-cyan-300">
                                 View All <ArrowRight className="w-4 h-4 ml-1" />
                             </Button>
                         </Link>
@@ -220,7 +220,7 @@ export default function HomePage() {
                             </p>
                         </div>
                         <Link href="/products">
-                            <Button variant="ghost" className="text-violet-400 hover:text-violet-300">
+                            <Button variant="ghost" className="text-cyan-400 hover:text-cyan-300">
                                 View All <ArrowRight className="w-4 h-4 ml-1" />
                             </Button>
                         </Link>
@@ -242,7 +242,7 @@ export default function HomePage() {
             <section className="py-20 px-4">
                 <div className="max-w-7xl mx-auto">
                     <div className="glass rounded-3xl p-8 md:p-16 text-center relative overflow-hidden">
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-violet-500/10 rounded-full blur-[128px] pointer-events-none" />
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[128px] pointer-events-none" />
                         <div className="relative z-10">
                             <h2 className="text-3xl md:text-5xl font-bold text-white">
                                 Ready to find your
@@ -290,13 +290,13 @@ export default function HomePage() {
                                 key={item.title}
                                 className="glass-card rounded-2xl p-8 text-center"
                             >
-                                <div className="w-12 h-12 rounded-xl bg-violet-500/10 flex items-center justify-center mx-auto mb-4">
-                                    <item.icon className="w-6 h-6 text-violet-400" />
+                                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center mx-auto mb-4">
+                                    <item.icon className="w-6 h-6 text-cyan-400" />
                                 </div>
                                 <h3 className="text-base font-semibold text-white mb-2">
                                     {item.title}
                                 </h3>
-                                <p className="text-sm text-gray-400">{item.desc}</p>
+                                <p className="text-sm text-cyan-100/60">{item.desc}</p>
                             </div>
                         ))}
                     </div>
